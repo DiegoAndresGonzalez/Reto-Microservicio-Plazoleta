@@ -1,0 +1,19 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/PLAZOLETA
+    username: root
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+appDescription: "Administrar restaurantes, platos y pedidos."
+appVersion: "1.0.0"
+
+microservice:
+    userServiceUrl: http://localhost:8081/api/admin/owner/
