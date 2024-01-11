@@ -1,22 +1,24 @@
 package com.pragma.powerup.domain.model;
 
+import static com.pragma.powerup.domain.utils.Constant.*;
+
 public class RestaurantModel {
 
     private Long id;
     private String name;
-    private Integer nit;
+    private String nit;
     private String address;
     private String phone;
     private String urlLogo;
-    private Long idProprietary;
+    private Long idOwner;
 
-    public RestaurantModel(Long id, String name, Integer nit, String address, String phone, String urlLogo, Long idProprietary) {
+    public RestaurantModel(Long id, String name, String nit, String address, String phone, String urlLogo, Long idOwner) {
         this.name = name;
         this.nit = nit;
         this.address = address;
         this.phone = phone;
         this.urlLogo = urlLogo;
-        this.idProprietary = idProprietary;
+        this.idOwner = idOwner;
         this.id = id;
     }
 
@@ -28,11 +30,11 @@ public class RestaurantModel {
         this.name = name;
     }
 
-    public Integer getNit() {
+    public String getNit() {
         return nit;
     }
 
-    public void setNit(Integer nit) {
+    public void setNit(String nit) {
         this.nit = nit;
     }
 
@@ -60,12 +62,12 @@ public class RestaurantModel {
         this.urlLogo = urlLogo;
     }
 
-    public Long getIdProprietary() {
-        return idProprietary;
+    public Long getIdOwner() {
+        return idOwner;
     }
 
-    public void setIdProprietary(Long idProprietary) {
-        this.idProprietary = idProprietary;
+    public void setIdOwner(Long idOwner) {
+        this.idOwner = idOwner;
     }
 
     public Long getId() {
@@ -74,5 +76,17 @@ public class RestaurantModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean isNit(){
+        return this.nit.matches(NIT_REGEX_PATTERN);
+    }
+
+    public boolean isPhone(){
+        return this.phone.matches(PHONE_REGEX_PATTERN);
+    }
+
+    public boolean isName(){
+        return this.name.matches(RESTAURANT_NAME_REGEX_PATTERN);
     }
 }

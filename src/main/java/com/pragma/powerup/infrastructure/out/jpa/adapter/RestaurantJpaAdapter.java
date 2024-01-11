@@ -3,7 +3,7 @@ package com.pragma.powerup.infrastructure.out.jpa.adapter;
 import com.pragma.powerup.domain.model.RestaurantModel;
 import com.pragma.powerup.domain.model.UserModel;
 import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
-import com.pragma.powerup.infrastructure.client.UserClient;
+import com.pragma.powerup.infrastructure.out.jpa.client.UserClient;
 import com.pragma.powerup.infrastructure.out.jpa.entity.RestaurantEntity;
 import com.pragma.powerup.infrastructure.out.jpa.mapper.IRestaurantEntityMapper;
 import com.pragma.powerup.infrastructure.out.jpa.repository.IRestaurantRepository;
@@ -18,10 +18,11 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
 
     @Override
     public RestaurantModel createRestaurant(RestaurantModel restaurantModel) {
-       UserModel responseModel = userClient.fetchUserModel(restaurantModel.getIdProprietary());
+       UserModel responseModel = userClient.fetchUserModel(restaurantModel.getIdOwner());
        userClient.validateProprietary(responseModel);
        RestaurantEntity restaurantEntity = restaurantRepository.save(restaurantEntityMapper.
                toRestaurantEntity(restaurantModel));
        return restaurantEntityMapper.toRestaurantModel(restaurantEntity);
     }
+
 }

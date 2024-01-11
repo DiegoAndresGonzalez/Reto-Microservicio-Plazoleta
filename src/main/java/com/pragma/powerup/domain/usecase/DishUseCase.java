@@ -1,7 +1,7 @@
 package com.pragma.powerup.domain.usecase;
 
 import com.pragma.powerup.domain.api.IDishServicePort;
-import com.pragma.powerup.domain.exception.DomainException;
+import com.pragma.powerup.domain.exception.InvalidInputException;
 import com.pragma.powerup.domain.model.DishModel;
 import com.pragma.powerup.domain.spi.IDishPersistencePort;
 
@@ -28,7 +28,7 @@ public class DishUseCase implements IDishServicePort {
             dishModel.setPrice(dishModel.getPrice());
         }
         if (dishModel.getDescription() == null || dishModel.getPrice() == null) {
-            throw new DomainException("Debes ingresar por lo menos un dato nuevo.");
+            throw new InvalidInputException("Debes ingresar por lo menos un dato nuevo.");
         }
         dishPersistencePort.updateDish(id,dishModel);
     }

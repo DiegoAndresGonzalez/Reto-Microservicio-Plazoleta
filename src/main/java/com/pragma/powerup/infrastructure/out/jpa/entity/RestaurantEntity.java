@@ -34,5 +34,5 @@ public class RestaurantEntity {
     private String urlLogo;
 
     @Column(name = "id_propietario")
-    private Long idProprietary;
+    private Long idOwner;
 }

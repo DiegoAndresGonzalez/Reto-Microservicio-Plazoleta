@@ -1,8 +1,6 @@
 package com.pragma.powerup.application.dto.request;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -10,10 +8,10 @@ import lombok.Setter;
 public class RestaurantRequestDto {
 
     private String name;
-    private Integer nit;
+    private String nit;
     private String address;
     private String phone;
     private String urlLogo;
-    private Long idProprietary;
+    private Long idOwner;
 
 }

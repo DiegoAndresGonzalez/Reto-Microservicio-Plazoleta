@@ -10,10 +10,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-      dialect: org.hibernate.dialect.MySQLDialect
     show-sql: true
 appDescription: "Administrar restaurantes, platos y pedidos."
 appVersion: "1.0.0"
 
 microservice:
-    userServiceUrl: http://localhost:8081/api/admin/owner/
+    userServiceUrl: http://localhost:8081/api/admin/user/
