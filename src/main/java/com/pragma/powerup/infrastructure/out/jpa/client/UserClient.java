@@ -1,13 +1,15 @@
-package com.pragma.powerup.infrastructure.client;
+package com.pragma.powerup.infrastructure.out.jpa.client;
 
+import com.pragma.powerup.domain.exception.DataNotFoundException;
 import com.pragma.powerup.domain.model.UserModel;
+import com.pragma.powerup.infrastructure.exception.InvalidRoleException;
+import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
+
 import static com.pragma.powerup.domain.utils.Constant.PROPRIETARY_ROLE;
 
 @Component
@@ -26,8 +28,10 @@ public class UserClient {
     }
 
     public void validateProprietary(UserModel responseModel){
-        if (!PROPRIETARY_ROLE.equals(responseModel.getRole().getRole())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"El usuario no tiene el rol propietario.");
+        if (responseModel == null){
+            throw new NoDataFoundException("No se ha encontrado un usuario que corresponda con la id ingresada.");
+        } else if (!PROPRIETARY_ROLE.equals(responseModel.getRole().getRole())){
+            throw new InvalidRoleException("El usuario no tiene el rol propietario.");
         }
     }
 
