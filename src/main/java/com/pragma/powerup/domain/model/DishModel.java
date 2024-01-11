@@ -1,12 +1,14 @@
 package com.pragma.powerup.domain.model;
 
+import static com.pragma.powerup.domain.utils.Constant.DISH_PRICE_REGEX_PATTERN;
+
 public class DishModel {
 
     private Long id;
     private String name;
     private CategoryModel categoryId;
     private String description;
-    private Integer price;
+    private String price;
     private RestaurantModel restaurantId;
     private String imageUrl;
     private Boolean active;
@@ -14,7 +16,7 @@ public class DishModel {
     public DishModel() {
     }
 
-    public DishModel(Long id, String name, CategoryModel categoryId, String description, Integer price, RestaurantModel restaurantId, String imageUrl, Boolean active) {
+    public DishModel(Long id, String name, CategoryModel categoryId, String description, String price, RestaurantModel restaurantId, String imageUrl, Boolean active) {
         this.id = id;
         this.name = name;
         this.categoryId = categoryId;
@@ -57,11 +59,11 @@ public class DishModel {
         this.description = description;
     }
 
-    public Integer getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -88,4 +90,9 @@ public class DishModel {
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+    public boolean isPrice(){
+        return this.price.matches(DISH_PRICE_REGEX_PATTERN);
+    }
+
 }

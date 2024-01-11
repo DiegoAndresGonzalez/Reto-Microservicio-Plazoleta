@@ -12,7 +12,7 @@ public class CreateDishRequestDto {
     private String name;
     private CategoryModel categoryId;
     private String description;
-    private Integer price;
+    private String price;
     private RestaurantModel restaurantId;
     private String imageUrl;
 

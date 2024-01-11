@@ -1,5 +1,6 @@
 package com.pragma.powerup.infrastructure.exceptionhandler;
 
+import com.pragma.powerup.domain.exception.DataNotFoundException;
 import com.pragma.powerup.domain.exception.InvalidInputException;
 import com.pragma.powerup.infrastructure.exception.InvalidRoleException;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
@@ -40,6 +41,15 @@ public class ControllerAdvisor {
         Map<String,String> exResponse = new HashMap<>();
         exResponse.put(MESSAGE, invalidInputException.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(exResponse);
+    }
+
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<Map<String ,String >> handleDataNotFoundEx(
+            DataNotFoundException dataNotFoundException){
+        Map<String,String> exResponse = new HashMap<>();
+        exResponse.put(MESSAGE, dataNotFoundException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(exResponse);
     }
     
