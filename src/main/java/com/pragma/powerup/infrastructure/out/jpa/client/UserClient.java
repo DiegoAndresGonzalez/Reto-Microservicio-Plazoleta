@@ -1,6 +1,5 @@
 package com.pragma.powerup.infrastructure.out.jpa.client;
 
-import com.pragma.powerup.domain.exception.DataNotFoundException;
 import com.pragma.powerup.domain.model.UserModel;
 import com.pragma.powerup.infrastructure.exception.InvalidRoleException;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;

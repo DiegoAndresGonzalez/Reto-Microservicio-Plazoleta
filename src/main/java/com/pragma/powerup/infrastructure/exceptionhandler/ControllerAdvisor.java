@@ -1,6 +1,7 @@
 package com.pragma.powerup.infrastructure.exceptionhandler;
 
 import com.pragma.powerup.domain.exception.DataNotFoundException;
+import com.pragma.powerup.domain.exception.DuplicateDataException;
 import com.pragma.powerup.domain.exception.InvalidInputException;
 import com.pragma.powerup.infrastructure.exception.InvalidRoleException;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
@@ -52,5 +53,14 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(exResponse);
     }
-    
+
+    @ExceptionHandler(DuplicateDataException.class)
+    public ResponseEntity<Map<String,String>> handleDuplicateEx(
+            DuplicateDataException duplicateDataException){
+        Map<String,String> exResponse = new HashMap<>();
+        exResponse.put(MESSAGE, duplicateDataException.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(exResponse);
+    }
+
 }

@@ -6,6 +6,6 @@ import com.pragma.powerup.application.dto.request.UpdateDishRequestDto;
 public interface IDishHandler {
 
     void createDish(CreateDishRequestDto createDishRequestDto);
-    void updateDish(Long id, UpdateDishRequestDto updateDishRequestDto);
+    void updateDish(UpdateDishRequestDto updateDishRequestDto);
 
 }

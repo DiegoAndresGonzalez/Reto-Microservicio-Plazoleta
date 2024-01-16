@@ -29,10 +29,9 @@ public class OwnerRestController {
         dishHandler.createDish(createDishRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @PatchMapping("dish/{id}")
-    public ResponseEntity<Void> updateDish(@PathVariable Long id,
-                                           @RequestBody UpdateDishRequestDto updateDishRequestDto){
-        dishHandler.updateDish(id,updateDishRequestDto);
+    @PatchMapping("dish")
+    public ResponseEntity<Void> updateDish(@RequestBody UpdateDishRequestDto updateDishRequestDto){
+        dishHandler.updateDish(updateDishRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

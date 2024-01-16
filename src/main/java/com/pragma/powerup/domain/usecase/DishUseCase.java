@@ -2,6 +2,7 @@ package com.pragma.powerup.domain.usecase;
 
 import com.pragma.powerup.domain.api.IDishServicePort;
 import com.pragma.powerup.domain.exception.DataNotFoundException;
+import com.pragma.powerup.domain.exception.DuplicateDataException;
 import com.pragma.powerup.domain.exception.InvalidInputException;
 import com.pragma.powerup.domain.model.CategoryModel;
 import com.pragma.powerup.domain.model.DishModel;
@@ -83,20 +84,48 @@ public class DishUseCase implements IDishServicePort {
     }
 
     @Override
-    public void updateDish(Long id, DishModel dishModel) {
-        if (dishModel.getDescription() != null){
-            dishModel.setDescription(dishModel.getDescription());
+    public void updateDish(DishModel dishModel) {
+        DishModel foundDish = dishPersistencePort.findDishById(dishModel.getId());
+        validateDishExistence(dishModel);
+        validateUpdateInput(dishModel);
+        validateUpdateDescription(foundDish, dishModel.getDescription());
+        validateUpdatePrice(foundDish, dishModel);
+        dishPersistencePort.updateDish(foundDish);
+     }
+
+    private void validateDishExistence(DishModel foundDish) {
+        if (foundDish == null) {
+            throw new DataNotFoundException("El plato no existe.");
         }
-        if (dishModel.getPrice() != null){
-            dishModel.setPrice(dishModel.getPrice());
-        }
-        if (dishModel.getDescription() == null || dishModel.getPrice() == null) {
+    }
+
+    private void validateUpdateInput(DishModel dishModel) {
+        if ((dishModel.getDescription() == null || dishModel.getDescription().trim().isEmpty())
+                && (dishModel.getPrice() == null || dishModel.getPrice().trim().isEmpty())) {
             throw new InvalidInputException("Debes ingresar por lo menos un dato nuevo.");
         }
-        dishPersistencePort.updateDish(id,dishModel);
-     }
+    }
+
+    private void validateUpdateDescription(DishModel foundDish, String newDescription) {
+        if (newDescription != null && !newDescription.trim().isEmpty()) {
+            if (foundDish.getDescription().equals(newDescription)){
+                throw new DuplicateDataException("La descripción que estás intentando ingresar " +
+                        "es la misma que existe actualmente.");
+            }
+            foundDish.setDescription(newDescription);
+        }
+    }
+
+    private void validateUpdatePrice(DishModel foundDish, DishModel dishModel) {
+        if (dishModel.getPrice() != null && !dishModel.getPrice().trim().isEmpty()) {
+            if (!dishModel.isPrice()) {
+                throw new InvalidInputException("Ingresa el precio correctamente.");
+            } else if (foundDish.getPrice().equals(dishModel.getPrice())){
+                throw new DuplicateDataException("El precio que estás intentando ingresar " +
+                        "es el mismo que existe actualmente.");
+            }
+            foundDish.setPrice(dishModel.getPrice());
+        }
+    }
+
 }
-
-
-
-

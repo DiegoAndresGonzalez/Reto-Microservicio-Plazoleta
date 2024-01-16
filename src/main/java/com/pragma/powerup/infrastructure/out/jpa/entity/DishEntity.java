@@ -29,7 +29,7 @@ public class DishEntity {
     private String description;
 
     @Column(name = "precio")
-    private Integer price;
+    private String price;
 
     @ManyToOne
     @JoinColumn(name = "id_restaurante")
