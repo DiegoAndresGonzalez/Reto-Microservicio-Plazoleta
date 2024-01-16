@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpdateDishRequestDto {
-
-    private Integer price;
+    private Long id;
+    private String price;
     private String description;
 
 }

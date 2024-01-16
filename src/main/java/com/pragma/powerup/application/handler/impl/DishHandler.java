@@ -25,8 +25,8 @@ public class DishHandler implements IDishHandler {
     }
 
     @Override
-    public void updateDish(Long id, UpdateDishRequestDto updateDishRequestDto) {
+    public void updateDish(UpdateDishRequestDto updateDishRequestDto) {
         DishModel dishModel = dishRequestMapper.toUpdateDishModel(updateDishRequestDto);
-        dishServicePort.updateDish(id,dishModel);
+        dishServicePort.updateDish(dishModel);
     }
 }
