@@ -10,7 +10,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import static com.pragma.powerup.domain.utils.Constant.OWNER_ROLE;
 
 @RestController
 @RequestMapping("api/owner/")
@@ -25,11 +28,13 @@ public class OwnerRestController {
             @ApiResponse(responseCode = "409", description = "Dish already exists", content = @Content)
     })
     @PostMapping("dish")
+    @PreAuthorize("hasRole('"+OWNER_ROLE+"')")
     public ResponseEntity<Void> createDish(@RequestBody CreateDishRequestDto createDishRequestDto){
         dishHandler.createDish(createDishRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @PatchMapping("dish")
+    @PreAuthorize("hasRole('"+OWNER_ROLE+"')")
     public ResponseEntity<Void> updateDish(@RequestBody UpdateDishRequestDto updateDishRequestDto){
         dishHandler.updateDish(updateDishRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);

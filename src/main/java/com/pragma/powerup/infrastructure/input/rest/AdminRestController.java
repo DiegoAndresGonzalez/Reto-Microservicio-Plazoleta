@@ -9,10 +9,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.pragma.powerup.domain.utils.Constant.ADMIN_ROLE;
 
 @RestController
 @RequestMapping("api/admin/")
@@ -27,6 +30,7 @@ public class AdminRestController {
             @ApiResponse(responseCode = "409", description = "Owner already exists", content = @Content)
     })
     @PostMapping("create/restaurant")
+    @PreAuthorize("hasRole('"+ADMIN_ROLE+"')")
     public ResponseEntity<Void> createRestaurant(@RequestBody RestaurantRequestDto restaurantRequestDto){
         restaurantHandler.createRestaurant(restaurantRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
