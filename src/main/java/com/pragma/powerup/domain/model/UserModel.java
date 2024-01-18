@@ -12,7 +12,8 @@ import lombok.Setter;
 public class UserModel {
 
     private Long id;
+    private String email;
+    private String password;
     private RoleModel role;
-
 
 }
