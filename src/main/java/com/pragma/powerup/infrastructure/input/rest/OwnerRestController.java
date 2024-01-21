@@ -2,6 +2,7 @@ package com.pragma.powerup.infrastructure.input.rest;
 
 import com.pragma.powerup.application.dto.request.CreateDishRequestDto;
 import com.pragma.powerup.application.dto.request.UpdateDishRequestDto;
+import com.pragma.powerup.application.dto.request.UpdateDishStatusDto;
 import com.pragma.powerup.application.handler.IDishHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,6 +38,13 @@ public class OwnerRestController {
     @PreAuthorize("hasRole('"+OWNER_ROLE+"')")
     public ResponseEntity<Void> updateDish(@RequestBody UpdateDishRequestDto updateDishRequestDto){
         dishHandler.updateDish(updateDishRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("dish/status")
+    @PreAuthorize("hasRole('"+OWNER_ROLE+"')")
+    public ResponseEntity<Void> updateDishStatus(@RequestBody UpdateDishStatusDto updateDishStatusDto){
+        dishHandler.updateDishStatus(updateDishStatusDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

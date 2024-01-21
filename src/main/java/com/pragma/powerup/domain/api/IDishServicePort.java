@@ -6,4 +6,5 @@ public interface IDishServicePort {
 
     void createDish(DishModel dishModel);
     void updateDish(DishModel dishModel);
+    void updateDishStatus(DishModel dishModel);
 }

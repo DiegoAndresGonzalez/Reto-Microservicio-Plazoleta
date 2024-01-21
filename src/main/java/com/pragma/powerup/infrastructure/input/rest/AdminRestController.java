@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.pragma.powerup.domain.utils.Constant.ADMIN_ROLE;
 
 @RestController
-@RequestMapping("api/admin/")
+@RequestMapping("/api/admin/")
 @RequiredArgsConstructor
 public class AdminRestController {
 
@@ -30,7 +30,7 @@ public class AdminRestController {
             @ApiResponse(responseCode = "409", description = "Owner already exists", content = @Content)
     })
     @PostMapping("create/restaurant")
-    @PreAuthorize("hasRole('"+ADMIN_ROLE+"')")
+    //@PreAuthorize("hasRole('"+ADMIN_ROLE+"')")
     public ResponseEntity<Void> createRestaurant(@RequestBody RestaurantRequestDto restaurantRequestDto){
         restaurantHandler.createRestaurant(restaurantRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
