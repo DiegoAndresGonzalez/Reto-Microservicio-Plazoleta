@@ -14,5 +14,4 @@ public class Constant {
     public static final String DISH_PRICE_REGEX_PATTERN = "^[1-9]\\d*$";
     public static final String SECRET_KEY = "bLbjRGox3VMtwGXzsFh51hL4AADgiqjMTxbzId3RSWJd9aU3KFC8flGRrrNIprvz";
 
-
 }

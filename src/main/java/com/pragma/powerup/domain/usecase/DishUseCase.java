@@ -93,6 +93,7 @@ public class DishUseCase implements IDishServicePort {
         dishPersistencePort.updateDish(foundDish);
      }
 
+
     private void validateDishExistence(DishModel foundDish) {
         if (foundDish == null) {
             throw new DataNotFoundException("El plato no existe.");
@@ -128,4 +129,27 @@ public class DishUseCase implements IDishServicePort {
         }
     }
 
+    @Override
+    public void updateDishStatus(DishModel dishModel) {
+        DishModel foundDish = dishPersistencePort.findDishById(dishModel.getId());
+        validateDishExistence(foundDish);
+        validateStatusInput(dishModel);
+        validateUpdateStatus(foundDish,dishModel.getActive());
+        dishPersistencePort.updateDishStatus(foundDish);
+    }
+
+    private void validateStatusInput(DishModel dishModel) {
+        if (dishModel.getActive() == null) {
+            throw new InvalidInputException("Debes ingresar el nuevo estado del plato.");
+        }
+    }
+
+    private void validateUpdateStatus(DishModel foundDish, Boolean newActive) {
+        if (foundDish.getActive().equals(newActive)) {
+                String message = Boolean.TRUE.equals(newActive) ?
+                        "El plato ya se encuentra activado." : "El plato ya se encuentra desactivado.";
+                throw new DuplicateDataException(message);
+        }
+        foundDish.setActive(newActive);
+    }
 }

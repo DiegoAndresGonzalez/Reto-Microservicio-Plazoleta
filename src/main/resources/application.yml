@@ -19,5 +19,5 @@ appDescription: "Administrar restaurantes, platos y pedidos."
 appVersion: "1.0.0"
 
 microservice:
-    userServiceUrl: http://localhost:8081/api/admin/user/
+    userServiceUrl: http://localhost:8081/api/user/
     authServiceUrl: http://localhost:8081/auth/

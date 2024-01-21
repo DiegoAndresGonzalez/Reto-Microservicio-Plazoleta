@@ -1,5 +1,6 @@
 package com.pragma.powerup.infrastructure.configuration;
 
+import com.pragma.powerup.infrastructure.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.pragma.powerup.domain.utils.Constant.ADMIN_ROLE;
+import static com.pragma.powerup.domain.utils.Constant.OWNER_ROLE;
 
 @Configuration
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
                 .antMatchers("/api/admin/**").hasRole(ADMIN_ROLE)
+                .antMatchers("/api/owner/**").hasRole(OWNER_ROLE)
                 .antMatchers("/auth/**").permitAll()
                 .anyRequest()
                 .authenticated()

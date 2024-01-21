@@ -1,6 +1,7 @@
 package com.pragma.powerup.application.mapper;
 
 import com.pragma.powerup.application.dto.request.CreateDishRequestDto;
+import com.pragma.powerup.application.dto.request.UpdateDishStatusDto;
 import com.pragma.powerup.application.dto.request.UpdateDishRequestDto;
 import com.pragma.powerup.domain.model.DishModel;
 import org.mapstruct.Mapper;
@@ -13,5 +14,6 @@ public interface IDishRequestMapper {
 
     DishModel toCreateDishModel(CreateDishRequestDto createDishRequestDto);
     DishModel toUpdateDishModel(UpdateDishRequestDto updateDishRequestDto);
+    DishModel toModifyDishStatus(UpdateDishStatusDto updateDishStatusDto);
 
 }

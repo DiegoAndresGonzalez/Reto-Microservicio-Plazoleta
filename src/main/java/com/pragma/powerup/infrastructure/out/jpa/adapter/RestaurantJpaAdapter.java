@@ -8,18 +8,22 @@ import com.pragma.powerup.infrastructure.out.jpa.client.UserClient;
 import com.pragma.powerup.infrastructure.out.jpa.entity.RestaurantEntity;
 import com.pragma.powerup.infrastructure.out.jpa.mapper.IRestaurantEntityMapper;
 import com.pragma.powerup.infrastructure.out.jpa.repository.IRestaurantRepository;
+import com.pragma.powerup.infrastructure.security.jwt.TokenHolder;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 
 @RequiredArgsConstructor
 public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
 
     private final IRestaurantRepository restaurantRepository;
     private final IRestaurantEntityMapper restaurantEntityMapper;
-    private final IUserFeignClient userFeignClient;
+    private final UserClient userClient;
 
     @Override
     public RestaurantModel createRestaurant(RestaurantModel restaurantModel) {
-       UserModel responseModel = userFeignClient.fetchUserModel()
+       String token = TokenHolder.getToken();
+       UserModel responseModel = userClient.fetchUserModel(token, restaurantModel.getIdOwner());
+       userClient.validateProprietary(responseModel);
        RestaurantEntity restaurantEntity = restaurantRepository.save(restaurantEntityMapper.
                toRestaurantEntity(restaurantModel));
        return restaurantEntityMapper.toRestaurantModel(restaurantEntity);
@@ -29,6 +33,12 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     public RestaurantModel findRestaurantById(Long restaurantId) {
         return restaurantEntityMapper.toRestaurantModel
                 (restaurantRepository.findById(restaurantId).orElse(null));
+    }
+
+    @Override
+    public RestaurantModel findOwnerById(Long ownerId) {
+        return restaurantEntityMapper.toRestaurantModel(
+                restaurantRepository.findOwnerById(ownerId).orElse(null));
     }
 
 }
