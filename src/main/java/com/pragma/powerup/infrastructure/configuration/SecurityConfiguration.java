@@ -11,8 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.pragma.powerup.domain.utils.Constant.ADMIN_ROLE;
-import static com.pragma.powerup.domain.utils.Constant.OWNER_ROLE;
+import static com.pragma.powerup.domain.utils.Constant.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -28,8 +27,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .antMatchers("/api/admin/**").hasRole(ADMIN_ROLE)
-                .antMatchers("/api/owner/**").hasRole(OWNER_ROLE)
+                .antMatchers("/api/user/**").hasAnyRole(ADMIN_ROLE,CLIENT_ROLE,OWNER_ROLE)
                 .antMatchers("/auth/**").permitAll()
                 .anyRequest()
                 .authenticated()

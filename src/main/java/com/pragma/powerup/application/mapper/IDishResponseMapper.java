@@ -1,14 +1,13 @@
-package com.pragma.powerup.infrastructure.out.jpa.mapper;
+package com.pragma.powerup.application.mapper;
 
+import com.pragma.powerup.application.dto.response.ClientMenuResponseDto;
 import com.pragma.powerup.domain.model.DishModel;
-import com.pragma.powerup.infrastructure.out.jpa.entity.DishEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
-public interface IDishEntityMapper {
-    DishEntity toDishEntity(DishModel dishModel);
-    DishModel toDishModel(DishEntity dishEntity);
+public interface IDishResponseMapper {
+    ClientMenuResponseDto toClientMenuResponse(DishModel dishModel);
 }

@@ -3,14 +3,15 @@ package com.pragma.powerup.infrastructure.out.jpa.adapter;
 import com.pragma.powerup.domain.model.RestaurantModel;
 import com.pragma.powerup.domain.model.UserModel;
 import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
-import com.pragma.powerup.infrastructure.feignclient.IUserFeignClient;
 import com.pragma.powerup.infrastructure.out.jpa.client.UserClient;
 import com.pragma.powerup.infrastructure.out.jpa.entity.RestaurantEntity;
 import com.pragma.powerup.infrastructure.out.jpa.mapper.IRestaurantEntityMapper;
 import com.pragma.powerup.infrastructure.out.jpa.repository.IRestaurantRepository;
 import com.pragma.powerup.infrastructure.security.jwt.TokenHolder;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 @RequiredArgsConstructor
 public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
@@ -23,7 +24,7 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     public RestaurantModel createRestaurant(RestaurantModel restaurantModel) {
        String token = TokenHolder.getToken();
        UserModel responseModel = userClient.fetchUserModel(token, restaurantModel.getIdOwner());
-       userClient.validateProprietary(responseModel);
+       userClient.validateOwner(responseModel);
        RestaurantEntity restaurantEntity = restaurantRepository.save(restaurantEntityMapper.
                toRestaurantEntity(restaurantModel));
        return restaurantEntityMapper.toRestaurantModel(restaurantEntity);
@@ -39,6 +40,12 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     public RestaurantModel findOwnerById(Long ownerId) {
         return restaurantEntityMapper.toRestaurantModel(
                 restaurantRepository.findOwnerById(ownerId).orElse(null));
+    }
+
+    @Override
+    public Page<RestaurantModel> getAllRestaurantsPaginated(Integer page, Integer size) {
+        Page<RestaurantEntity> restaurantEntityPage = restaurantRepository.getAllRestaurants(PageRequest.of(page,size,Sort.by("name")));
+        return restaurantEntityPage.map(restaurantEntityMapper::toRestaurantModel);
     }
 
 }

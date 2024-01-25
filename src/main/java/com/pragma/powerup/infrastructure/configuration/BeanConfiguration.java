@@ -66,8 +66,7 @@ public class BeanConfiguration {
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> {
-            String token = TokenHolder.getToken();
-            UserModel userModel = feignClient.fetchUserModelByEmail(token,username);
+            UserModel userModel = feignClient.fetchUser(TokenHolder.getBearer());
             return new CustomUserDetails(userModel);
         };
     }

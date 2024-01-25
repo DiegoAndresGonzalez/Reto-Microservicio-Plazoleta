@@ -1,10 +1,8 @@
 package com.pragma.powerup.infrastructure.out.jpa.client;
 
 import com.pragma.powerup.domain.exception.InvalidInputException;
-import com.pragma.powerup.domain.model.DishModel;
 import com.pragma.powerup.domain.model.RestaurantModel;
 import com.pragma.powerup.domain.model.UserModel;
-import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.infrastructure.exception.InvalidRoleException;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
 import com.pragma.powerup.infrastructure.feignclient.IUserFeignClient;
@@ -24,7 +22,7 @@ public class UserClient {
         return userServiceClient.fetchUserModel(token,id);
     }
 
-    public void validateProprietary(UserModel responseModel){
+    public void validateOwner(UserModel responseModel){
         if (responseModel == null){
             throw new NoDataFoundException("No se ha encontrado un usuario que corresponda con la id ingresada.");
         } else if (!OWNER_ROLE.equals(responseModel.getRole().getRole())){
@@ -33,8 +31,7 @@ public class UserClient {
     }
 
     public void validateOwnership(String token, RestaurantModel restaurantModel){
-        String username = TokenHolder.getUsername();
-        UserModel ownerModel = userServiceClient.fetchUserModelByEmail(token, username);
+        UserModel ownerModel = userServiceClient.fetchUser(token);
         if (!restaurantModel.getIdOwner().equals(ownerModel.getId())){
             throw new InvalidInputException("No puedes modificar platos de un restaurante que" +
                     " no te pertenezca.");

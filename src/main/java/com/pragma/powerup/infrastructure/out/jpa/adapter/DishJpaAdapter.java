@@ -10,6 +10,9 @@ import com.pragma.powerup.infrastructure.out.jpa.mapper.IDishEntityMapper;
 import com.pragma.powerup.infrastructure.out.jpa.repository.IDishRepository;
 import com.pragma.powerup.infrastructure.security.jwt.TokenHolder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
 public class DishJpaAdapter implements IDishPersistencePort {
@@ -21,6 +24,8 @@ public class DishJpaAdapter implements IDishPersistencePort {
 
     @Override
     public DishModel createDish(DishModel dishModel) {
+        RestaurantModel restaurantModel = restaurantPersistencePort.findRestaurantById(dishModel.getRestaurantId().getId());
+        userClient.validateOwnership(TokenHolder.getBearer(),restaurantModel);
         DishEntity dishEntity = dishRepository.save(dishEntityMapper.toDishEntity(dishModel));
         return dishEntityMapper.toDishModel(dishEntity);
     }
@@ -33,18 +38,17 @@ public class DishJpaAdapter implements IDishPersistencePort {
 
     @Override
     public DishModel updateDish(DishModel dishModel) {
+        RestaurantModel restaurantModel = restaurantPersistencePort.findRestaurantById(dishModel.getRestaurantId().getId());
+        userClient.validateOwnership(TokenHolder.getBearer(),restaurantModel);
         return dishEntityMapper.toDishModel(dishRepository
                 .save(dishEntityMapper.toDishEntity(dishModel)));
     }
 
     @Override
-    public DishModel updateDishStatus(DishModel dishModel) {
-        RestaurantModel restaurantModel = restaurantPersistencePort.findRestaurantById(
-                dishModel.getRestaurantId().getId());
-        userClient.validateOwnership(TokenHolder.getToken(),restaurantModel);
-        return dishEntityMapper.toDishModel(dishRepository
-                .save(dishEntityMapper.toDishEntity(dishModel))
-        );
+    public Page<DishModel> getAllDishesPaginated(String category, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<DishEntity> dishEntityPage = dishRepository.getAllDishes(category,pageable);
+        return dishEntityPage.map(dishEntityMapper::toDishModel);
     }
 
 }
