@@ -10,6 +10,7 @@ import com.pragma.powerup.domain.model.RestaurantModel;
 import com.pragma.powerup.domain.spi.ICategoryPersistencePort;
 import com.pragma.powerup.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
+import org.springframework.data.domain.Page;
 
 public class DishUseCase implements IDishServicePort {
 
@@ -135,7 +136,12 @@ public class DishUseCase implements IDishServicePort {
         validateDishExistence(foundDish);
         validateStatusInput(dishModel);
         validateUpdateStatus(foundDish,dishModel.getActive());
-        dishPersistencePort.updateDishStatus(foundDish);
+        dishPersistencePort.updateDish(foundDish);
+    }
+
+    @Override
+    public Page<DishModel> getAllDishesPaginated(String category, Integer page, Integer size) {
+        return dishPersistencePort.getAllDishesPaginated(category,page,size);
     }
 
     private void validateStatusInput(DishModel dishModel) {

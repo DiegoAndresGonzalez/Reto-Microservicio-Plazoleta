@@ -1,27 +1,34 @@
 package com.pragma.powerup.infrastructure.input.rest;
 
 import com.pragma.powerup.application.dto.request.CreateDishRequestDto;
+import com.pragma.powerup.application.dto.request.RestaurantRequestDto;
 import com.pragma.powerup.application.dto.request.UpdateDishRequestDto;
 import com.pragma.powerup.application.dto.request.UpdateDishStatusDto;
+import com.pragma.powerup.application.dto.response.ClientMenuResponseDto;
+import com.pragma.powerup.application.dto.response.ClientRestaurantResponseDto;
 import com.pragma.powerup.application.handler.IDishHandler;
+import com.pragma.powerup.application.handler.IRestaurantHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import static com.pragma.powerup.domain.utils.Constant.OWNER_ROLE;
+import static com.pragma.powerup.domain.utils.Constant.*;
 
 @RestController
-@RequestMapping("api/owner/")
+@RequestMapping("api/user/")
 @RequiredArgsConstructor
-public class OwnerRestController {
+public class UserRestController {
 
     private final IDishHandler dishHandler;
+    private final IRestaurantHandler restaurantHandler;
+
 
     @Operation(summary = "Create a new dish")
     @ApiResponses(value = {
@@ -48,5 +55,29 @@ public class OwnerRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(summary = "Create a new restaurant")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",description = "Owner created", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Owner already exists", content = @Content)
+    })
+    @PostMapping("create/restaurant")
+    @PreAuthorize("hasRole('"+ADMIN_ROLE+"')")
+    public ResponseEntity<Void> createRestaurant(@RequestBody RestaurantRequestDto restaurantRequestDto){
+        restaurantHandler.createRestaurant(restaurantRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
+    @GetMapping("client/restaurant")
+    @PreAuthorize("hasRole('"+CLIENT_ROLE+"')")
+    public ResponseEntity<Page<ClientRestaurantResponseDto>> getAllRestaurantsPaginated(@RequestParam Integer page, @RequestParam Integer size){
+        Page<ClientRestaurantResponseDto> restaurantResponseDto = restaurantHandler.getAllRestaurantsPaginated(page,size);
+        return new ResponseEntity<>(restaurantResponseDto,HttpStatus.OK);
+    }
+
+    @GetMapping("client/dish")
+    @PreAuthorize("hasRole('"+CLIENT_ROLE+"')")
+    public ResponseEntity<Page<ClientMenuResponseDto>> getAllDishesPaginated(@RequestParam String category, @RequestParam Integer page, @RequestParam Integer size){
+        Page<ClientMenuResponseDto> menuResponseDto = dishHandler.getAllDishesPaginated(category,page,size);
+        return new ResponseEntity<>(menuResponseDto, HttpStatus.OK);
+    }
 }

@@ -1,6 +1,5 @@
 package com.pragma.powerup.infrastructure.security.jwt;
 
-import antlr.Token;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,8 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
-        TokenHolder.setToken("Bearer " + jwt);
-        TokenHolder.setUsername(userEmail);
+        TokenHolder.setBearer("Bearer " + jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt,userDetails)){

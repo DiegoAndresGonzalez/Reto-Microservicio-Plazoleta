@@ -4,6 +4,7 @@ import com.pragma.powerup.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.domain.exception.InvalidInputException;
 import com.pragma.powerup.domain.model.RestaurantModel;
 import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
+import org.springframework.data.domain.Page;
 
 public class RestaurantUseCase implements IRestaurantServicePort {
 
@@ -22,6 +23,11 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         validateUrlLogo(restaurantModel);
         validateIdOwner(restaurantModel);
         restaurantPersistencePort.createRestaurant(restaurantModel);
+    }
+
+    @Override
+    public Page<RestaurantModel> getAllRestaurantsPaginated(Integer page, Integer size) {
+        return restaurantPersistencePort.getAllRestaurantsPaginated(page,size);
     }
 
     private void validateName(RestaurantModel restaurantModel){
