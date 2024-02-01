@@ -1,6 +1,5 @@
 package com.pragma.powerup.domain.api;
 
-import com.pragma.powerup.application.dto.response.ClientMenuResponseDto;
 import com.pragma.powerup.domain.model.DishModel;
 import org.springframework.data.domain.Page;
 

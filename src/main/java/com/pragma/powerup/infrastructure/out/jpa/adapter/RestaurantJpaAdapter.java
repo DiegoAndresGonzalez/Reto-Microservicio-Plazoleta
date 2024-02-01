@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
 
@@ -40,6 +42,12 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     public RestaurantModel findOwnerById(Long ownerId) {
         return restaurantEntityMapper.toRestaurantModel(
                 restaurantRepository.findOwnerById(ownerId).orElse(null));
+    }
+
+    @Override
+    public RestaurantModel findRestaurantByName(String restaurantName) {
+        Optional<RestaurantEntity> restaurantEntity = restaurantRepository.findRestaurantByName(restaurantName);
+        return restaurantEntity.map(restaurantEntityMapper::toRestaurantModel).orElse(null);
     }
 
     @Override

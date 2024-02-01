@@ -6,7 +6,6 @@ import com.pragma.powerup.domain.model.UserModel;
 import com.pragma.powerup.infrastructure.exception.InvalidRoleException;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
 import com.pragma.powerup.infrastructure.feignclient.IUserFeignClient;
-import com.pragma.powerup.infrastructure.security.jwt.TokenHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,5 @@
 package com.pragma.powerup.application.dto.response;
 
-import com.pragma.powerup.domain.model.CategoryModel;
 import lombok.Getter;
 import lombok.Setter;
 
