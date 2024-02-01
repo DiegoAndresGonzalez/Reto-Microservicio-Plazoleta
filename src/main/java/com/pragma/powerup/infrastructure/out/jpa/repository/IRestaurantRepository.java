@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface IRestaurantRepository extends JpaRepository<RestaurantEntity,Long> {
 
+    Optional<RestaurantEntity> findRestaurantByName(String restaurantName);
     Optional<RestaurantEntity> findOwnerById(Long ownerId);
 
     @Query("SELECT r FROM RestaurantEntity r")

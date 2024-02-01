@@ -7,5 +7,6 @@ public interface IRestaurantPersistencePort {
     RestaurantModel createRestaurant(RestaurantModel restaurantModel);
     RestaurantModel findRestaurantById(Long restaurantId);
     RestaurantModel findOwnerById(Long ownerId);
+    RestaurantModel findRestaurantByName(String restaurantName);
     Page<RestaurantModel> getAllRestaurantsPaginated(Integer page, Integer size);
 }

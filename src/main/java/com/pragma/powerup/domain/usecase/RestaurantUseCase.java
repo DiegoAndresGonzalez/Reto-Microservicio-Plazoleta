@@ -37,6 +37,11 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         if (restaurantModel.getName() == null || restaurantModel.getName().trim().isEmpty()) {
             throw new InvalidInputException("El correo no puede estar vacío.");
         }
+
+        RestaurantModel foundRestaurant = restaurantPersistencePort.findRestaurantByName(restaurantModel.getName());
+        if (foundRestaurant != null){
+            throw new InvalidInputException("El nombre del restaurante ya existe.");
+        }
     }
 
     private void validateNit(RestaurantModel restaurantModel){

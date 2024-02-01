@@ -1,12 +1,10 @@
 package com.pragma.powerup.infrastructure.input.rest;
 
-import com.pragma.powerup.application.dto.request.CreateDishRequestDto;
-import com.pragma.powerup.application.dto.request.RestaurantRequestDto;
-import com.pragma.powerup.application.dto.request.UpdateDishRequestDto;
-import com.pragma.powerup.application.dto.request.UpdateDishStatusDto;
+import com.pragma.powerup.application.dto.request.*;
 import com.pragma.powerup.application.dto.response.ClientMenuResponseDto;
 import com.pragma.powerup.application.dto.response.ClientRestaurantResponseDto;
 import com.pragma.powerup.application.handler.IDishHandler;
+import com.pragma.powerup.application.handler.IOrderHandler;
 import com.pragma.powerup.application.handler.IRestaurantHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +26,7 @@ public class UserRestController {
 
     private final IDishHandler dishHandler;
     private final IRestaurantHandler restaurantHandler;
+    private final IOrderHandler orderHandler;
 
 
     @Operation(summary = "Create a new dish")
@@ -79,5 +78,12 @@ public class UserRestController {
     public ResponseEntity<Page<ClientMenuResponseDto>> getAllDishesPaginated(@RequestParam String category, @RequestParam Integer page, @RequestParam Integer size){
         Page<ClientMenuResponseDto> menuResponseDto = dishHandler.getAllDishesPaginated(category,page,size);
         return new ResponseEntity<>(menuResponseDto, HttpStatus.OK);
+    }
+
+    @PostMapping("client/order")
+    @PreAuthorize("hasRole('"+CLIENT_ROLE+"')")
+    public ResponseEntity<Void> dishOrderRequest(@RequestBody OrderRequestDto orderRequestDto){
+        orderHandler.requestOrder(orderRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

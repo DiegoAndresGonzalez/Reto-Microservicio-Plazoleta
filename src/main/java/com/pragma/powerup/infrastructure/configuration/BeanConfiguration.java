@@ -1,24 +1,27 @@
 package com.pragma.powerup.infrastructure.configuration;
 
+import com.pragma.powerup.domain.api.IClientServicePort;
 import com.pragma.powerup.domain.api.IDishServicePort;
 import com.pragma.powerup.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.domain.model.UserModel;
 import com.pragma.powerup.domain.spi.ICategoryPersistencePort;
+import com.pragma.powerup.domain.spi.IClientPersistencePort;
 import com.pragma.powerup.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
+import com.pragma.powerup.domain.usecase.ClientUseCase;
 import com.pragma.powerup.domain.usecase.DishUseCase;
 import com.pragma.powerup.domain.usecase.RestaurantUseCase;
 import com.pragma.powerup.infrastructure.feignclient.IUserFeignClient;
 import com.pragma.powerup.infrastructure.out.jpa.adapter.CategoryJpaAdapter;
+import com.pragma.powerup.infrastructure.out.jpa.adapter.ClientJpaAdapter;
 import com.pragma.powerup.infrastructure.out.jpa.adapter.DishJpaAdapter;
 import com.pragma.powerup.infrastructure.out.jpa.adapter.RestaurantJpaAdapter;
 import com.pragma.powerup.infrastructure.out.jpa.client.UserClient;
-import com.pragma.powerup.infrastructure.out.jpa.mapper.ICategoryMapper;
+import com.pragma.powerup.infrastructure.out.jpa.mapper.ICategoryEntityMapper;
 import com.pragma.powerup.infrastructure.out.jpa.mapper.IDishEntityMapper;
+import com.pragma.powerup.infrastructure.out.jpa.mapper.IOrderEntityMapper;
 import com.pragma.powerup.infrastructure.out.jpa.mapper.IRestaurantEntityMapper;
-import com.pragma.powerup.infrastructure.out.jpa.repository.ICategoryRepository;
-import com.pragma.powerup.infrastructure.out.jpa.repository.IDishRepository;
-import com.pragma.powerup.infrastructure.out.jpa.repository.IRestaurantRepository;
+import com.pragma.powerup.infrastructure.out.jpa.repository.*;
 import com.pragma.powerup.infrastructure.security.auth.CustomUserDetails;
 import com.pragma.powerup.infrastructure.security.jwt.TokenHolder;
 import lombok.RequiredArgsConstructor;
@@ -59,8 +62,19 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public ICategoryPersistencePort categoryPersistencePort(ICategoryRepository categoryRepository, ICategoryMapper categoryMapper){
+    public ICategoryPersistencePort categoryPersistencePort(ICategoryRepository categoryRepository, ICategoryEntityMapper categoryMapper){
         return new CategoryJpaAdapter(categoryRepository,categoryMapper);
+    }
+
+    @Bean
+    public IClientPersistencePort clientPersistencePort(IOrderRepository orderRepository, IOrderEntityMapper orderEntityMapper, IDishOrderRepository dishOrderRepository, IDishRepository dishRepository,
+                                                        IUserFeignClient userFeignClient){
+        return new ClientJpaAdapter(orderEntityMapper,orderRepository,dishOrderRepository,dishRepository,userFeignClient);
+    }
+
+    @Bean
+    public IClientServicePort clientServicePort(IClientPersistencePort clientPersistencePort,IDishPersistencePort dishPersistencePort,IRestaurantPersistencePort restaurantPersistencePort){
+        return new ClientUseCase(clientPersistencePort,dishPersistencePort,restaurantPersistencePort);
     }
 
     @Bean
