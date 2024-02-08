@@ -2,6 +2,7 @@ package com.pragma.powerup.application.handler.impl;
 
 import com.pragma.powerup.application.dto.request.RestaurantRequestDto;
 import com.pragma.powerup.application.dto.response.ClientRestaurantResponseDto;
+import com.pragma.powerup.application.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.application.handler.IRestaurantHandler;
 import com.pragma.powerup.application.mapper.IRestaurantRequestMapper;
 import com.pragma.powerup.application.mapper.IRestaurantResponseMapper;
@@ -28,8 +29,20 @@ public class RestaurantHandler implements IRestaurantHandler {
     }
 
     @Override
+    public RestaurantResponseDto findRestaurantByName(String name) {
+        RestaurantModel restaurantModel = restaurantServicePort.findRestaurantByName(name);
+        return restaurantResponseMapper.toRestaurantResponse(restaurantModel);
+    }
+
+    @Override
     public Page<ClientRestaurantResponseDto> getAllRestaurantsPaginated(Integer page, Integer size) {
         Page<RestaurantModel> restaurantModel = restaurantServicePort.getAllRestaurantsPaginated(page,size);
         return restaurantModel.map(restaurantResponseMapper::toClientRestaurantResponse);
     }
+
+    @Override
+    public void saveEmployeeRestaurant(Long employeeId, Long restaurantId) {
+        restaurantServicePort.saveEmployeeRestaurant(employeeId,restaurantId);
+    }
+
 }

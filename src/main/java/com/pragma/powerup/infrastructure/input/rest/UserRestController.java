@@ -3,9 +3,12 @@ package com.pragma.powerup.infrastructure.input.rest;
 import com.pragma.powerup.application.dto.request.*;
 import com.pragma.powerup.application.dto.response.ClientMenuResponseDto;
 import com.pragma.powerup.application.dto.response.ClientRestaurantResponseDto;
+import com.pragma.powerup.application.dto.response.EmployeeResponseDto;
+import com.pragma.powerup.application.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.application.handler.IDishHandler;
 import com.pragma.powerup.application.handler.IOrderHandler;
 import com.pragma.powerup.application.handler.IRestaurantHandler;
+import com.pragma.powerup.domain.utils.OrderStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -86,4 +89,25 @@ public class UserRestController {
         orderHandler.requestOrder(orderRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @GetMapping("owner/restaurant/{name}")
+    @PreAuthorize("hasRole('"+OWNER_ROLE+"')")
+    public ResponseEntity<RestaurantResponseDto> findRestaurant(@PathVariable String name){
+        return ResponseEntity.ok(restaurantHandler.findRestaurantByName(name));
+    }
+
+    @PostMapping("owner/employee/restaurant")
+    @PreAuthorize("hasRole('"+OWNER_ROLE+"')")
+    public ResponseEntity<Void> saveEmployeeRestaurant(@RequestParam Long employeeId, @RequestParam Long restaurantId){
+        restaurantHandler.saveEmployeeRestaurant(employeeId,restaurantId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("employee/order")
+    @PreAuthorize("hasRole('"+EMPLOYEE_ROLE+"')")
+    public ResponseEntity<EmployeeResponseDto> getOrderListPaginated(@RequestParam Integer page, @RequestParam Integer size, @RequestParam OrderStatus orderStatus){
+        EmployeeResponseDto employeeOrder = orderHandler.getOrderListPaginated(page, size, orderStatus);
+        return new ResponseEntity<>(employeeOrder, HttpStatus.FOUND);
+    }
+
 }

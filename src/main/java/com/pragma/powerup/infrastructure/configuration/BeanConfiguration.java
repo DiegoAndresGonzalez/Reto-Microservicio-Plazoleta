@@ -2,25 +2,18 @@ package com.pragma.powerup.infrastructure.configuration;
 
 import com.pragma.powerup.domain.api.IClientServicePort;
 import com.pragma.powerup.domain.api.IDishServicePort;
+import com.pragma.powerup.domain.api.IEmployeeServicePort;
 import com.pragma.powerup.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.domain.model.UserModel;
-import com.pragma.powerup.domain.spi.ICategoryPersistencePort;
-import com.pragma.powerup.domain.spi.IClientPersistencePort;
-import com.pragma.powerup.domain.spi.IDishPersistencePort;
-import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
+import com.pragma.powerup.domain.spi.*;
 import com.pragma.powerup.domain.usecase.ClientUseCase;
 import com.pragma.powerup.domain.usecase.DishUseCase;
+import com.pragma.powerup.domain.usecase.EmployeeUseCase;
 import com.pragma.powerup.domain.usecase.RestaurantUseCase;
 import com.pragma.powerup.infrastructure.feignclient.IUserFeignClient;
-import com.pragma.powerup.infrastructure.out.jpa.adapter.CategoryJpaAdapter;
-import com.pragma.powerup.infrastructure.out.jpa.adapter.ClientJpaAdapter;
-import com.pragma.powerup.infrastructure.out.jpa.adapter.DishJpaAdapter;
-import com.pragma.powerup.infrastructure.out.jpa.adapter.RestaurantJpaAdapter;
+import com.pragma.powerup.infrastructure.out.jpa.adapter.*;
 import com.pragma.powerup.infrastructure.out.jpa.client.UserClient;
-import com.pragma.powerup.infrastructure.out.jpa.mapper.ICategoryEntityMapper;
-import com.pragma.powerup.infrastructure.out.jpa.mapper.IDishEntityMapper;
-import com.pragma.powerup.infrastructure.out.jpa.mapper.IOrderEntityMapper;
-import com.pragma.powerup.infrastructure.out.jpa.mapper.IRestaurantEntityMapper;
+import com.pragma.powerup.infrastructure.out.jpa.mapper.*;
 import com.pragma.powerup.infrastructure.out.jpa.repository.*;
 import com.pragma.powerup.infrastructure.security.auth.CustomUserDetails;
 import com.pragma.powerup.infrastructure.security.jwt.TokenHolder;
@@ -42,8 +35,8 @@ public class BeanConfiguration {
     private final IUserFeignClient feignClient;
 
     @Bean
-    public IRestaurantPersistencePort restaurantPersistencePort(IRestaurantRepository restaurantRepository, IRestaurantEntityMapper restaurantEntityMapper, UserClient userClient){
-        return new RestaurantJpaAdapter(restaurantRepository,restaurantEntityMapper,userClient);
+    public IRestaurantPersistencePort restaurantPersistencePort(IRestaurantRepository restaurantRepository, IRestaurantEntityMapper restaurantEntityMapper, UserClient userClient, IEmployeeRestaurantRepository employeeRestaurantRepository, IEmployeeRestaurantEntityMapper employeeRestaurantEntityMapper){
+        return new RestaurantJpaAdapter(restaurantRepository,restaurantEntityMapper,userClient,employeeRestaurantRepository,employeeRestaurantEntityMapper);
     }
 
     @Bean
@@ -59,6 +52,16 @@ public class BeanConfiguration {
     @Bean
     public IDishServicePort dishServicePort(IDishPersistencePort dishPersistencePort, IRestaurantPersistencePort restaurantPersistencePort, ICategoryPersistencePort categoryPersistencePort){
         return new DishUseCase(dishPersistencePort, restaurantPersistencePort, categoryPersistencePort);
+    }
+
+    @Bean
+    public IEmployeePersistencePort employeePersistencePort(IOrderRepository orderRepository,IOrderEntityMapper orderEntityMapper,IDishOrderRepository dishOrderRepository){
+        return new EmployeeJpaAdapter(orderRepository,orderEntityMapper,dishOrderRepository);
+    }
+
+    @Bean
+    public IEmployeeServicePort employeeServicePort(IEmployeePersistencePort employeePersistencePort){
+        return new EmployeeUseCase(employeePersistencePort);
     }
 
     @Bean

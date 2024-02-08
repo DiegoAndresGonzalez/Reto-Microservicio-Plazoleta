@@ -8,6 +8,7 @@ public class Constant {
 
     public static final String OWNER_ROLE = "PROPIETARIO";
     public static final String ADMIN_ROLE = "ADMINISTRADOR";
+    public static final String EMPLOYEE_ROLE = "EMPLEADO";
     public static final String CLIENT_ROLE = "CLIENTE";
     public static final String NIT_REGEX_PATTERN = "\\d+";
     public static final String PHONE_REGEX_PATTERN = "^\\+?[0-9]{10,13}$";

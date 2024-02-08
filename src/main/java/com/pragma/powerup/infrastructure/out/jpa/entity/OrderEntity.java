@@ -1,6 +1,5 @@
 package com.pragma.powerup.infrastructure.out.jpa.entity;
 
-import com.pragma.powerup.domain.model.UserModel;
 import com.pragma.powerup.domain.utils.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "pedidos")
@@ -28,9 +26,6 @@ public class OrderEntity {
 
     @Column(name = "fecha")
     private Date date;
-
-    @OneToMany(mappedBy = "orderId")
-    private List<DishOrderEntity> dishOrder;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado")
