@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .antMatchers("/api/user/**").hasAnyRole(ADMIN_ROLE,CLIENT_ROLE,OWNER_ROLE)
+                .antMatchers("/api/user/**").hasAnyRole(ADMIN_ROLE,CLIENT_ROLE,OWNER_ROLE,EMPLOYEE_ROLE)
                 .antMatchers("/auth/**").permitAll()
                 .anyRequest()
                 .authenticated()

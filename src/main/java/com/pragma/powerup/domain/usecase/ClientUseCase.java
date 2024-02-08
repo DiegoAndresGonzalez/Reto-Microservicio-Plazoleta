@@ -11,6 +11,8 @@ import com.pragma.powerup.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.domain.utils.OrderStatus;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ClientUseCase implements IClientServicePort {
@@ -31,6 +33,7 @@ public class ClientUseCase implements IClientServicePort {
         validateDishNames(orderModel.getDishNames());
         validateRestaurantAndDish(orderModel);
         orderModel.setStatus(OrderStatus.PENDIENTE);
+        orderModel.setDate(Date.valueOf(LocalDate.now()));
         clientPersistencePort.requestOrder(orderModel);
     }
 

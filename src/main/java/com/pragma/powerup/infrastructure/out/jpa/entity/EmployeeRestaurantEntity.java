@@ -8,26 +8,21 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "pedidos_platos")
+@Table(name = "empleado_restaurante")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class DishOrderEntity {
+public class EmployeeRestaurantEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_pedido", referencedColumnName = "id")
-    private OrderEntity orderId;
+    @Column(name = "id_empleado")
+    private Long employeeId;
 
-    @ManyToOne
-    @JoinColumn(name = "id_plato")
-    private DishEntity dishModels;
-
-    @Column(name = "cantidad")
-    private Integer amount;
+    @Column(name = "id_restaurante")
+    private Long restaurantId;
 
 }

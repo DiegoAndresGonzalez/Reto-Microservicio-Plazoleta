@@ -26,8 +26,18 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     }
 
     @Override
+    public RestaurantModel findRestaurantByName(String name) {
+        return restaurantPersistencePort.findRestaurantByName(name);
+    }
+
+    @Override
     public Page<RestaurantModel> getAllRestaurantsPaginated(Integer page, Integer size) {
         return restaurantPersistencePort.getAllRestaurantsPaginated(page,size);
+    }
+
+    @Override
+    public void saveEmployeeRestaurant(Long employeeId, Long restaurantId) {
+        restaurantPersistencePort.saveEmployeeRestaurant(employeeId,restaurantId);
     }
 
     private void validateName(RestaurantModel restaurantModel){

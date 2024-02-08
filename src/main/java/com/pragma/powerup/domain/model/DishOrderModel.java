@@ -16,12 +16,7 @@ public class DishOrderModel {
 
     private Long id;
     private OrderModel orderId;
-    private List<DishModel> dishOrder;
+    private DishModel dishModels;
     private Integer amount;
-
-    public List<String> getDishName(){
-        return dishOrder.stream().map
-                (DishModel::getName).collect(Collectors.toList());
-    }
 
 }

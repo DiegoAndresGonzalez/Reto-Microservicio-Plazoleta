@@ -44,10 +44,8 @@ public class ClientJpaAdapter implements IClientPersistencePort {
                 .stream().map(dishOrderModel -> {
                     DishOrderEntity dishOrderEntity = orderEntityMapper.toDishOrderEntity(dishOrderModel);
                     dishOrderEntity.setOrderId(orderEntity);
-                    dishOrderModel.getDishOrder().forEach(dishModel -> {
-                        Optional<DishEntity> dishEntity = dishRepository.findDishByName(dishModel.getName());
-                        dishEntity.ifPresent(dishOrderEntity::setDishId);
-                    });
+                    Optional<DishEntity> dishEntity = dishRepository.findDishByName(dishOrderModel.getDishModels().getName());
+                    dishEntity.ifPresent(dishOrderEntity::setDishModels);
                     return dishOrderEntity;
                 })
                 .collect(Collectors.toList());

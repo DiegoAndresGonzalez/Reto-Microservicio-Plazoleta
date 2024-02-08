@@ -30,7 +30,7 @@ public class OrderModel {
 
     public List<String> getDishNames(){
         return dishOrder.stream()
-                .flatMap(dishOrderModel -> dishOrderModel.getDishName().stream())
+                .map(dishOrderModel -> dishOrderModel.getDishModels().getName())
                 .collect(Collectors.toList());
     }
 }
